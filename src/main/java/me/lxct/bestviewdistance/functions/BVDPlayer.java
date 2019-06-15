@@ -1,16 +1,15 @@
 package me.lxct.bestviewdistance.functions;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.lxct.bestviewdistance.BestViewDistance;
 import me.lxct.bestviewdistance.functions.sync.SetViewDistance;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
-
-import static me.lxct.bestviewdistance.functions.data.Variable.*;
-import static me.lxct.bestviewdistance.functions.hooks.WorldGuardHook.getPlayerRegions;
+import static me.lxct.bestviewdistance.functions.data.Variable.max;
+import static me.lxct.bestviewdistance.functions.data.Variable.min;
+import static me.lxct.bestviewdistance.functions.data.Variable.onLoginView;
+import static me.lxct.bestviewdistance.functions.data.Variable.serverVersion;
+import static me.lxct.bestviewdistance.functions.data.Variable.useLoginView;
+import static me.lxct.bestviewdistance.functions.data.Variable.usePermissions;
 import static me.lxct.bestviewdistance.functions.util.Scheduler.scheduleSync;
 
 public class BVDPlayer {
@@ -93,46 +92,6 @@ public class BVDPlayer {
         return this.p.getLocation();
     }
 
-    public int getCurrentMaxLimit() {
-        final FileConfiguration config = BestViewDistance.plugin.getConfig();
-        final Set<ProtectedRegion> regions = getPlayerRegions(this);
-        if(regions != null) {
-            int tmp = max;
-            for (final ProtectedRegion r : regions) {
-                final String name = r.getId();
-                if (config.isInt("Regions." + name + ".Max")) {
-                    tmp = Math.max(tmp, config.getInt("Regions." + name + ".Max"));
-                }
-            }
-            return tmp;
-        }
-        final String worldName = this.p.getWorld().getName();
-        if (config.isInt("Worlds." + worldName + ".Max")) {
-            return config.getInt("Worlds." + worldName + ".Max");
-        }
-        return max;
-    }
-
-    private int getCurrentMinLimit() {
-        final FileConfiguration config = BestViewDistance.plugin.getConfig();
-        final Set<ProtectedRegion> regions = getPlayerRegions(this);
-        if(regions != null) {
-            int tmp = min;
-            for (final ProtectedRegion r : regions) {
-                final String name = r.getId();
-                if (config.isInt("Regions." + name + ".Min")) {
-                    tmp = Math.min(tmp, config.getInt("Regions." + name + ".Min"));
-                }
-            }
-            return tmp;
-        }
-        final String worldName = this.p.getWorld().getName();
-        if (config.isInt("Worlds." + worldName + ".Min")) {
-            return config.getInt("Worlds." + worldName + ".Min");
-        }
-        return min;
-    }
-
     public int getSupportedViewDistance() {
         return this.supportedViewDistance;
     }
@@ -146,7 +105,6 @@ public class BVDPlayer {
     }
 
     public void setScheduledViewDistance(int scheduledViewDistance) {
-        this.scheduledViewDistance = Math.min(this.getCurrentMaxLimit(), Math.max(scheduledViewDistance, this.getCurrentMinLimit()));
         this.scheduledViewDistance = Math.min(this.scheduledViewDistance, this.getSettingsViewDistance());
         this.scheduledViewDistance = Math.min(this.scheduledViewDistance, this.getSupportedViewDistance());
     }

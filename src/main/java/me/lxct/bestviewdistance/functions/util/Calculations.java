@@ -17,7 +17,6 @@ public class Calculations {
 
             int supportedViewDistance = player.getSupportedViewDistance(); // View distance supported by player
 
-            if (usePing) {
                 final int ping = player.getPing(); // Get ping
 
                 if (ping < Variable.aping && ping >= safePing) { // If ping need to decrease vdist
@@ -26,9 +25,6 @@ public class Calculations {
                 else if (ping >= Variable.rping) { // If ping need to increase vdist
                     --supportedViewDistance; // Decrease
                 } // Big ping = Less View Distance
-            } else {
-                supportedViewDistance = player.getCurrentMaxLimit();
-            }
 
             player.setSupportedViewDistance(supportedViewDistance); // Store in var
 

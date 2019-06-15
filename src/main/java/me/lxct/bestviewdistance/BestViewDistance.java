@@ -5,7 +5,6 @@ import me.lxct.bestviewdistance.event.*;
 import me.lxct.bestviewdistance.functions.async.AsyncUpdateChecker;
 import me.lxct.bestviewdistance.functions.util.Calculations;
 import me.lxct.bestviewdistance.functions.util.Checkers;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -84,22 +83,10 @@ public class BestViewDistance extends JavaPlugin {
         // Schedule tasks
         //
 
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, applyViewDistance, 0L, this.getConfig().getInt("Delay.SetViewDelay", 5) * 20L); // CALCULATIONS SCHEDULER
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, detectAFK, 0L, this.getConfig().getInt("Delay.AFKDelay", 90) * 20L); // DETECT AFK SCHEDULER
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, detectFlying, 0L, this.getConfig().getInt("Delay.CheckFlyingDelay", 5) * 20L); // DETECT AFK SCHEDULER
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, calculations, 0L, this.getConfig().getInt("Delay.CalculationsDelay", 1) * 20L);
-
-        //
-        // BSTATS + ASYNC UPDATE CHECKER
-        //
-
-        //if (this.getConfig().getBoolean("Misc.Metrics")) {
-        //noinspection unused
-        final Metrics metrics = new Metrics(this); // METRICS
-        //}
-        if (this.getConfig().getBoolean("Misc.CheckUpdates")) {
-            new AsyncUpdateChecker(this).checkForUpdate(); // Add AsyncUpdateChecker (Thx Benz56)
-        }
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, applyViewDistance, 0L, this.getConfig().getInt("Delay.SetViewDelay", 5) * 20L); // CALCULATIONS SCHEDULER
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, detectAFK, 0L, this.getConfig().getInt("Delay.AFKDelay", 90) * 20L); // DETECT AFK SCHEDULER
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, detectFlying, 0L, this.getConfig().getInt("Delay.CheckFlyingDelay", 5) * 20L); // DETECT AFK SCHEDULER
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, calculations, 0L, this.getConfig().getInt("Delay.CalculationsDelay", 1) * 20L);
     }
 
     // Calculations

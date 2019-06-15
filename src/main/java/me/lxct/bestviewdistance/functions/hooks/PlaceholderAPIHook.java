@@ -1,18 +1,17 @@
 package me.lxct.bestviewdistance.functions.hooks;
 
-import me.clip.placeholderapi.external.EZPlaceholderHook;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.PlaceholderHook;
 import me.lxct.bestviewdistance.functions.BVDPlayer;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import static me.lxct.bestviewdistance.functions.data.Variable.*;
+import static me.lxct.bestviewdistance.functions.data.Variable.decimalsIndice;
+import static me.lxct.bestviewdistance.functions.data.Variable.decimalsTPS;
+import static me.lxct.bestviewdistance.functions.data.Variable.onlinePlayers;
+import static me.lxct.bestviewdistance.functions.data.Variable.timings;
 
-@SuppressWarnings("deprecation")
-public class PlaceholderAPIHook extends EZPlaceholderHook {
-
-    PlaceholderAPIHook(Plugin plugin) {
-        super(plugin, "VDIST");
-    }
+public class PlaceholderAPIHook extends PlaceholderHook {
 
     @Override
     public String onPlaceholderRequest(final Player p, final String identifier) {
@@ -45,5 +44,17 @@ public class PlaceholderAPIHook extends EZPlaceholderHook {
             return String.valueOf(player.getPing());
         }
         return null;
+    }
+
+    public static void hook() {
+        PlaceholderAPI.registerPlaceholderHook("pfess", new PlaceholderAPIHook());
+    }
+
+    public static void unhook() {
+        PlaceholderAPI.unregisterPlaceholderHook("pfess");
+    }
+
+    public static String replacepapi(final OfflinePlayer player, final String x) {
+        return PlaceholderAPI.setPlaceholders(player, x.replace("&", "ยง"));
     }
 }
